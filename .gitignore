@@ -86,3 +86,6 @@ MANIFEST
 
 # === VS Code ===
 .history/
+
+# === node modules ===
+node_modules/
