@@ -22,6 +22,7 @@ class ClinicSessionAdmin(admin.ModelAdmin):
 class AvailabilitySlotAdmin(admin.ModelAdmin):
     list_display = ('id', 'session', 'service', 'slot_start', 'slot_end', 'status', 'hold_expires')
     list_filter = ('status', 'service')
+    search_fields = ('session__doctor_clinic__doctor_last_name', 'session__doctor_first_name')
     autocomplete_fields = ('session', 'service')
 
 @admin.register(SessionChange)
