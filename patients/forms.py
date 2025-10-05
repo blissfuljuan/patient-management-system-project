@@ -1,6 +1,6 @@
 from django import forms
 
-from patients.models import Patient
+from .models import Patient, GuestPatient
 
 
 class PatientForm(forms.ModelForm):
@@ -17,7 +17,7 @@ class PatientForm(forms.ModelForm):
 
 class GuestPatientForm(forms.ModelForm):
     class Meta:
-        model = Patient
+        model = GuestPatient
         fields = ['first_name', 'last_name', 'email', 'phone', 'dob']
         widgets = {
             'dob': forms.DateInput(attrs={'type': 'date', 'class': 'border-gray-300 rounded-md'}),

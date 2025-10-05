@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load form_extras %}
 {% block title %}New Patient{% endblock %}
 {% block content %}
 <h2 class="text-2xl font-bold mb-4">New Patient</h2>
@@ -6,28 +7,28 @@
   <div class="grid gap-4 sm:grid-cols-2">
     <div>
       <label class="block text-sm font-medium mb-1">First name</label>
-      {{ form.first_name|add_class:"input" }}
+      {{ form.first_name }}
     </div>
     <div>
       <label class="block text-sm font-medium mb-1">Last name</label>
-      {{ form.last_name|add_class:"input" }}
+      {{ form.last_name }}
     </div>
   </div>
 
   <div class="grid gap-4 sm:grid-cols-2">
     <div>
       <label class="block text-sm font-medium mb-1">Email</label>
-      {{ form.email|add_class:"input" }}
+      {{ form.email }}
     </div>
     <div>
       <label class="block text-sm font-medium mb-1">Phone</label>
-      {{ form.phone|add_class:"input" }}
+      {{ form.phone }}
     </div>
   </div>
 
   <div>
     <label class="block text-sm font-medium mb-1">Date of Birth</label>
-    {{ form.dob|add_class:"input" }}
+    {{ form.dob }}
   </div>
 
   <button class="inline-flex items-center rounded-md bg-sky-600 px-4 py-2 text-white hover:bg-sky-700">
