@@ -6,5 +6,5 @@ app_name = "appointments"
 
 urlpatterns = [
     path('', views.AppointmentListView.as_view(), name='list'),
-    path('/book/<int:slot_id>/', views.book_appointment, name='book'),
+    path('book/<int:slot_id>/', views.book_appointment, name='book'),
 ]
