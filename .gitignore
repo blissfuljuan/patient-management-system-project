@@ -1,0 +1,88 @@
+# === Python ===
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# === Django ===
+*.log
+*.pot
+*.pyc
+*.pyo
+db.sqlite3
+media/
+staticfiles/
+.env
+.env.local
+.env.*.local
+
+# Django specific files
+/local_settings.py
+/static/
+/media/
+/config/*.pyc
+
+# === Virtual Environment ===
+venv/
+env/
+ENV/
+.venv/
+.virtualenv/
+
+# === IDE / Editor Files ===
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# === OS generated files ===
+.DS_Store
+Thumbs.db
+
+# === Migrations ===
+**/migrations/*.py
+!**/migrations/__init__.py
+
+# === Test / Coverage ===
+.coverage
+.tox/
+.nox/
+pytest_cache/
+htmlcov/
+.coverage.*
+.pytest_cache/
+
+# === Build / Distribution ===
+build/
+dist/
+*.egg-info/
+.eggs/
+MANIFEST
+
+# === Logs & Reports ===
+*.log
+*.out
+*.err
+*.tmp
+*.pid
+
+# === MyPy / Pyre / Pytype ===
+.mypy_cache/
+.dmypy.json
+.pyre/
+.pytype/
+
+# === Jupyter / Notebook ===
+.ipynb_checkpoints/
+
+# === Docker ===
+*.pid
+*.seed
+*.bak
+*.swp
+.dockerignore
+
+# === VS Code ===
+.history/
