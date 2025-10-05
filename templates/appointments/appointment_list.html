@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Appointments{% endblock %}
+{% block content %}
+<h2 class="text-2xl font-bold mb-4">Appointments</h2>
+
+<div class="overflow-hidden rounded-xl border bg-white">
+  <table class="min-w-full divide-y">
+    <thead class="bg-gray-50">
+      <tr class="text-left text-sm text-gray-600">
+        <th class="px-4 py-3">ID</th>
+        <th class="px-4 py-3">Status</th>
+        <th class="px-4 py-3">Channel</th>
+        <th class="px-4 py-3">When</th>
+        <th class="px-4 py-3">Who</th>
+        <th class="px-4 py-3">Service</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y bg-white text-sm">
+      {% for a in appointments %}
+        <tr>
+          <td class="px-4 py-3">#{{ a.id }}</td>
+          <td class="px-4 py-3">
+            <span class="inline-flex rounded-full px-2 py-0.5 text-xs
+              {% if a.status == 'CONFIRMED' %} bg-green-100 text-green-800
+              {% elif a.status == 'PENDING' %} bg-yellow-100 text-yellow-800
+              {% elif a.status == 'CANCELLED' %} bg-red-100 text-red-800
+              {% elif a.status == 'COMPLETED' %} bg-sky-100 text-sky-800
+              {% else %} bg-gray-100 text-gray-800 {% endif %}">
+              {{ a.status }}
+            </span>
+          </td>
+          <td class="px-4 py-3">{{ a.booking_channel }}</td>
+          <td class="px-4 py-3">{{ a.start_time|date:"M d, Y H:i" }}–{{ a.end_time|date:"H:i" }}</td>
+          <td class="px-4 py-3">
+            {% if a.patient %}{{ a.patient.last_name }}, {{ a.patient.first_name }}
+            {% elif a.guest %}Guest: {{ a.guest.last_name }}, {{ a.guest.first_name }}
+            {% else %}<span class="text-gray-500">Unknown</span>{% endif %}
+          </td>
+          <td class="px-4 py-3">{{ a.service.name }}</td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="6" class="px-4 py-6 text-gray-500">No appointments yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Book Appointment{% endblock %}
+{% block content %}
+<h2 class="text-2xl font-bold mb-2">Book Appointment</h2>
+
+<div class="rounded-xl border bg-white p-5 shadow-sm mb-6">
+  <div class="grid gap-2 text-sm">
+    <div><span class="text-gray-500">Slot:</span> <span class="font-medium">{{ slot.slot_start|date:"M d, Y H:i" }} – {{ slot.slot_end|date:"H:i" }}</span></div>
+    <div><span class="text-gray-500">Service:</span> <span class="font-medium">{{ service.name }}</span></div>
+  </div>
+</div>
+
+<form method="post" class="space-y-6">
+  {% csrf_token %}
+
+  <fieldset class="rounded-xl border bg-white p-5">
+    <legend class="text-sm font-semibold px-1 -mt-3 bg-white inline-block">Booking Details</legend>
+    <div class="grid gap-4 sm:grid-cols-3">
+      <div>
+        <label class="block text-sm font-medium mb-1">Channel</label>
+        {{ choice_form.booking_channel|add_class:"select" }}
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Existing Patient ID</label>
+        {{ choice_form.existing_patient_id|add_class:"input" }}
+      </div>
+      <div class="flex items-end">
+        <label class="inline-flex items-center gap-2">
+          {{ choice_form.is_walk_in }}
+          <span class="text-sm">Is Walk-in</span>
+        </label>
+      </div>
+    </div>
+    <p class="mt-2 text-xs text-gray-500">Provide either an existing Patient ID or fill Guest details below.</p>
+  </fieldset>
+
+  <fieldset class="rounded-xl border bg-white p-5">
+    <legend class="text-sm font-semibold px-1 -mt-3 bg-white inline-block">Guest (new / walk-in)</legend>
+    <div class="grid gap-4 sm:grid-cols-2">
+      <div>
+        <label class="block text-sm font-medium mb-1">First name</label>
+        {{ guest_form.first_name|add_class:"input" }}
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Last name</label>
+        {{ guest_form.last_name|add_class:"input" }}
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Email</label>
+        {{ guest_form.email|add_class:"input" }}
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Phone</label>
+        {{ guest_form.phone|add_class:"input" }}
+      </div>
+      <div class="sm:col-span-2">
+        <label class="block text-sm font-medium mb-1">Date of Birth</label>
+        {{ guest_form.dob|add_class:"input" }}
+      </div>
+    </div>
+  </fieldset>
+
+  <div class="flex gap-3">
+    <button class="inline-flex items-center rounded-md bg-sky-600 px-4 py-2 text-white hover:bg-sky-700">
+      Confirm Booking
+    </button>
+    <a href="{% url 'home' %}" class="inline-flex items-center rounded-md border px-4 py-2 hover:bg-gray-50">
+      Cancel
+    </a>
+  </div>
+</form>
+{% endblock %}
