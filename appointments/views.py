@@ -1,13 +1,70 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.shortcuts import render, get_object_or_404, redirect
+from django.views.decorators.http import require_POST
 from django.views.generic import ListView
 
 from patients.models import Patient
 from scheduling.models import AvailabilitySlot, AvailabilityStatus
 from .forms import BookingChoiceForm, GuestInlineForm
-from .models import Appointment, BookingChannel
+from .models import Appointment, BookingChannel, AppointmentStatus
+from . import services as appt_services
 
+# Allowed transitions
+_ALLOWED = {
+    'confirm': {AppointmentStatus.PENDING},
+    'complete': {AppointmentStatus.CONFIRMED},
+    'cancel': {AppointmentStatus.PENDING, AppointmentStatus.CONFIRMED},
+    'no_show': {AppointmentStatus.CONFIRMED},
+}
+
+def _check_transition(appt: Appointment, action: str) -> bool:
+    return appt.status in _ALLOWED[action]
+
+@login_required
+@require_POST
+def confirm_appointment(request, pk: int):
+    appt = get_object_or_404(Appointment, pk=pk)
+    if not _check_transition(appt, 'confirm'):
+        messages.error(request, "Only PENDING appointments can be confirmed.")
+        return redirect('appointments:list')
+    appt_services.mark_confirmed(appt, actor=str(request.user))
+    messages.success(request, f"Appointment #{appt.pk} confirmed.")
+    return redirect('appointments:list')
+
+@login_required
+@require_POST
+def complete_appointment(request, pk: int):
+    appt = get_object_or_404(Appointment, pk=pk)
+    if not _check_transition(appt, 'complete'):
+        messages.error(request, "Only CONFIRMED appointments can be completed.")
+        return redirect('appointments:list')
+    appt_services.mark_completed(appt, actor=str(request.user))
+    messages.success(request, f"Appointment #{appt.pk} completed.")
+    return redirect('appointments:list')
+
+@login_required
+@require_POST
+def cancel_appointment(request, pk: int):
+    appt = get_object_or_404(Appointment, pk=pk)
+    if not _check_transition(appt, 'cancel'):
+        messages.error(request, "Only PENDING or CONFIRMED appointments can be cancelled.")
+        return redirect('appointments:list')
+    appt_services.mark_cancelled(appt, actor=str(request.user))
+    messages.success(request, f"Appointment #{appt.pk} cancelled.")
+    return redirect('appointments:list')
+
+@login_required
+@require_POST
+def no_show_appointment(request, pk: int):
+    appt = get_object_or_404(Appointment, pk=pk)
+    if not _check_transition(appt, 'no_show'):
+        messages.error(request, "Only CONFIRMED appointments can be marked as no-show.")
+        return redirect('appointments:list')
+    appt_services.mark_no_show(appt, actor=str(request.user))
+    messages.success(request, f"Appointment #{appt.pk} marked as no-show.")
+    return redirect('appointments:list')
 
 # Create your views here.
 class AppointmentListView(ListView):

@@ -16,27 +16,51 @@
       </tr>
     </thead>
     <tbody class="divide-y bg-white text-sm">
-      {% for a in appointments %}
+      {% for appointment in appointments %}
         <tr>
-          <td class="px-4 py-3">#{{ a.id }}</td>
-          <td class="px-4 py-3">
-            <span class="inline-flex rounded-full px-2 py-0.5 text-xs
-              {% if a.status == 'CONFIRMED' %} bg-green-100 text-green-800
-              {% elif a.status == 'PENDING' %} bg-yellow-100 text-yellow-800
-              {% elif a.status == 'CANCELLED' %} bg-red-100 text-red-800
-              {% elif a.status == 'COMPLETED' %} bg-sky-100 text-sky-800
-              {% else %} bg-gray-100 text-gray-800 {% endif %}">
-              {{ a.status }}
-            </span>
-          </td>
-          <td class="px-4 py-3">{{ a.booking_channel }}</td>
-          <td class="px-4 py-3">{{ a.start_time|date:"M d, Y H:i" }}–{{ a.end_time|date:"H:i" }}</td>
-          <td class="px-4 py-3">
-            {% if a.patient %}{{ a.patient.last_name }}, {{ a.patient.first_name }}
-            {% elif a.guest %}Guest: {{ a.guest.last_name }}, {{ a.guest.first_name }}
-            {% else %}<span class="text-gray-500">Unknown</span>{% endif %}
-          </td>
-          <td class="px-4 py-3">{{ a.service.name }}</td>
+            <td class="px-4 py-3">#{{ appointment.id }}</td>
+            <td class="px-4 py-3">
+                <span class="inline-flex rounded-full px-2 py-0.5 text-xs
+                {% if a.status == 'CONFIRMED' %} bg-green-100 text-green-800
+                {% elif a.status == 'PENDING' %} bg-yellow-100 text-yellow-800
+                {% elif a.status == 'CANCELLED' %} bg-red-100 text-red-800
+                {% elif a.status == 'COMPLETED' %} bg-sky-100 text-sky-800
+                {% else %} bg-gray-100 text-gray-800 {% endif %}">
+                    {{ appointment.status }}
+                </span>
+            </td>
+            <td class="px-4 py-3">{{ appointment.booking_channel }}</td>
+            <td class="px-4 py-3">{{ appointment.start_time|date:"M d, Y H:i" }}–{{ appointment.end_time|date:"H:i" }}</td>
+            <td class="px-4 py-3">
+                {% if appointment.patient %}{{ appointment.patient.last_name }}, {{ appointment.patient.first_name }}
+                {% elif appointment.guest %}Guest: {{ appointment.guest.last_name }}, {{ appointment.guest.first_name }}
+                {% else %}<span class="text-gray-500">Unknown</span>{% endif %}
+            </td>
+            <td class="px-4 py-3">{{ appointment.service.name }}</td>
+            <td class="px-4 py-3">
+                <div class="flex flex-wrap gap-2">
+                    {% if appointment.status == 'PENDING' %}
+                        <form method="post" action="{% url 'appointments:confirm' appointment.id %}">{% csrf_token %}
+                            <button class="rounded-md bg-green-600 px-3 py-1.5 text-white hover:bg-green-700">Confirm</button>
+                        </form>
+                        <form method="post" action="{% url 'appointments:cancel' appointment.id %}">{% csrf_token %}
+                            <button class="rounded-md bg-red-600 px-3 py-1.5 text-white hover:bg-red-700">Cancel</button>
+                        </form>
+                    {% elif appointment.status == 'CONFIRMED' %}
+                        <form method="post" action="{% url 'appointments:complete' appointment.id %}">{% csrf_token %}
+                            <button class="rounded-md bg-sky-600 px-3 py-1.5 text-white hover:bg-sky-700">Complete</button>
+                        </form>
+                        <form method="post" action="{% url 'appointments:now_show' appointment.id %}">{% csrf_token %}
+                            <button class="rounded-md bg-amber-600 px-3 py-1.5 text-white hover:bg-amber-700">No-Show</button>
+                        </form>
+                        <form method="post" action="{% url 'appointments:cancel' appointment.id %}">{% csrf_token %}
+                            <button class="rounded-md bg-red-600 px-3 py-1.5 text-white hover:bg-red-700">Cancel</button>
+                        </form>
+                    {% else %}
+                        <span class="text-gray-400">-</span>
+                    {% endif %}
+                </div>
+            </td>
         </tr>
       {% empty %}
         <tr><td colspan="6" class="px-4 py-6 text-gray-500">No appointments yet.</td></tr>
