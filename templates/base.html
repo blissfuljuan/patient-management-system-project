@@ -1,5 +1,6 @@
-<!doctype lang="en">
-<html>
+{% load static %}
+<!doctype html>
+<html lang="en" class="h-full bg-gray-50">
 <head>
     <meta charset="utf-8">
     <title>{% block title %}Clinic App{% endblock %}</title>
@@ -10,9 +11,9 @@
 <body class="min-h-full text-gray-900">
     <header class="bg-white border-b">
         <div class="mx-auto max-w-6xl py-4 flex items-center justify-between">
-            <a href="{% url 'home' %}" class="text-xl font-semibold text-sky-700">Clinic Appointment</a>
+            <a href="{% url 'doctors:home' %}" class="text-xl font-semibold text-sky-700">Clinic Appointment</a>
             <nav class="flex gap-4 text-sm">
-                <a href="{% url 'home' %}" class="hover:text-sky-700">Home</a>
+                <a href="{% url 'doctors:home' %}" class="hover:text-sky-700">Home</a>
                 <a href="{% url 'patients:list' %}" class="hover:text-sky-700">Patients</a>
                 <a href="{% url 'appointments:list' %}" class="hover:text-sky-700">Appointment</a>
             </nav>
