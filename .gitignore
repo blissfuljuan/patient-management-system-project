@@ -20,9 +20,11 @@ staticfiles/
 
 # Django specific files
 /local_settings.py
-/static/
+/static/css/
 /media/
 /config/*.pyc
+!static/src/tailwind.css
+
 
 # === Virtual Environment ===
 venv/
