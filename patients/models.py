@@ -31,3 +31,20 @@ class Patient(models.Model):
             return None
         today = date.today()
         return today.year - self.dob.year - ((today.month, today.day) < (self.dob.month, self.dob.day))
+
+class GuestPatient(models.Model):
+    first_name = models.CharField(max_length=80)
+    last_name = models.CharField(max_length=80)
+    email = models.EmailField(blank=True)
+    phone = models.CharField(
+        max_length=32, blank=True,
+        validators=[RegexValidator(r"^[0-9+\-()]*$", "Digits and + - ( ) only.")]
+    )
+    dob = models.DateField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at',]
+
+    def __str__(self):
+        return f"Guest: {self.last_name}, {self.first_name}"
