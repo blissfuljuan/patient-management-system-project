@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %Doctors - clinic App{% endblock %}
+{% block content %}
+<h2 class="text-2xl font-bold tracking-tight mb-4">Doctors</h2>
+<div class="overflow-hidden rounded-xl border bg-white">
+    <ul role="list" class="divide-y">
+        {% for doctor in doctors %}
+            <li class="p-4 flex items-center justify-between">
+                <div>
+                    <div class="font-medium">Dr. {{ doctor.first_name }} {{ doctor.last_name }}</div>
+                    {% if doctor.specialty %}<div class="text-sm text-gray-500">{{ doctor.specialty }}</div>{% endif %}
+                </div>
+                <a href="{% url 'doctors:detail' doctor.id %}" class="text-sky-700 hover:underline">View</a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
