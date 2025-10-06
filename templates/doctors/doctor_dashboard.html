@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Doctor Dashboard{% endblock %}
+
+{% block content %}
+<div class="mb-6">
+    <h2 class="text-2xl font-bold">Doctor Dashboard - Dr. {{ doctor.first_name }} {{ doctor.last_name }}</h2>
+    {% if doctor.specialty %}<p class="text-gray-600">{{ doctor.specialy }}</p>{% endif %}
+</div>
+
+<form method="get" class="mb-6 rounded-xl border bg-white p-4 flex flex-wrap items-end gap-4">
+
+</form>
