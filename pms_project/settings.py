@@ -83,22 +83,42 @@ WSGI_APPLICATION = 'pms_project.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+supabase_url = env('SUPABASE_DB_URL', default=None) or env('MYSQL_DB_HOST', default=None)
 
-DATABASES = {
-    'default': {
-        'ENGINE': env('DJANGO_ENGINE', default='django.db.backends.sqlite3'),
-        'NAME': env('DB_NAME'),
-        'USER': env('DB_USER'),
-        'PASSWORD': env('DB_PASSWORD'),
-        'HOST': env('DB_HOST', default='127.0.0.1'),
-        'PORT': env('DB_PORT', default='3306'),
-        'OPTIONS': {
-            'charset': 'utf8mb4',
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-        },
-        'CONN_MAX_AGE': 60
+if supabase_url:
+    DATABASES = {
+        'default': environ.Env.db_url_config(supabase_url),
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': env('MYSQL_DB_NAME'),
+            'USER': env('MYSQL_DB_USER'),
+            'PASSWORD': env('MYSQL_DB_PASSWORD'),
+            'HOST': env('MYSQL_DB_HOST', default='127.0.0.1'),
+            'PORT': env('MYSQL_DB_PORT', default='3306'),
+            'OPTIONS': {
+                'charset': 'utf8mb4',
+                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            },
+            'CONN_MAX_AGE': env('DB_CONN_MAX_AGE', default=60),
+        }
+    }
+
+# Always keep database connections open for a short period to improve performance.
+DATABASES['default']['CONN_MAX_AGE'] = env.int('DB_CONN_MAX_AGE', default=60)
+
+# Ensure the correct database engine is used when connecting to Supabase.
+engine = DATABASES['default'].get('ENGINE', '')
+if engine.startswith('django.db.backends.postgresql'):
+    DATABASES['default'].setdefault(
+        'OPTIONS',
+        {
+            'sslmode': env('SUPABASE_DB_SSLMODE', default='require'),
+        },
+    )
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -143,4 +163,4 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Wrap each request in a DB transaction
-ATOMIC_REQUEST = True
+ATOMIC_REQUESTS = True
