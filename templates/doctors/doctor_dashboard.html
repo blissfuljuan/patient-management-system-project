@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{ load get_item %}
 {% block title %}Doctor Dashboard{% endblock %}
 
 {% block content %}
@@ -8,5 +9,124 @@
 </div>
 
 <form method="get" class="mb-6 rounded-xl border bg-white p-4 flex flex-wrap items-end gap-4">
-
+    <div>
+        <label class="block text-sm font-medium mb-1">Start</label>
+        {{ form.start }}
+    </div>
+    <div>
+        <label class="block text-sm font-medium mb-1">End</label>
+        {{ form.end }}
+    </div>
+    <button class="h-10 inline-flex items-center rounded-md bg-sky-600 px-4 text-white" hover:bg-sky-700">
+        Apply
+    </button>
 </form>
+
+<!-- KPI cards -->
+ <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-6 mb-6">
+    <div class="rounded-xl border bg-white p-4">
+        <div class="text-xs text-gray-500">Sessions</div>
+        <div class="text-2xl font-semibold">{{ totals.sessions|default:0 }}</div>
+    </div>
+    <div class="rounded-xl border bg-white p-4">
+        <div class="text-xs text-gray-500">Appointments</div>
+        <div class="text-2xl font-semibold">{{ totals.appts|default:0 }}</div>
+    </div>
+    <div class="rounded-xl border bg-white p-4">
+        <div class="text-xs text-gray-500">Pending</div>
+        <div class="text-2xl font-semibold">{{ totals.pend|default:0 }}</div>
+    </div>
+    <div class="rounded-xl border bg-white p-4">
+        <div class="text-xs text-gray-500">Confirmed</div>
+        <div class="text-2xl font-semibold">{{ totals.conf|default:0 }}</div>
+    </div>
+    <div class="rounded-xl border bg-white p-4">
+        <div class="text-xs text-gray-500">Completed</div>
+        <div class="text-2xl font-semibold">{{ totals.comp|default:0 }}</div>
+    </div>
+    <div class="rounded-xl border bg-white p-4">
+        <div class="text-xs text-gray-500">Cancelled / No-Show</div>
+        <div class="text-2xl font-semibold">
+            {{ totals.canc|default:0|add:taotals.nos|default:0 }}
+        </div>
+    </div>
+ </div>
+
+<!-- Sessions List -->
+<div class="space-y-5">
+    {% for session in sessions %}
+        <section class="roudned-xl border bg-white p-4">
+            <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                    <div class="text-sm text-gray-500">
+                        {{ session.doctor_clinic.clinic.name }}{% if session.room %} • Room {{ session.room.name }}{% endif %}
+                    </div>
+                    <h3 class="font-semibold">
+                        {{ session.date }} - {{ session.start_time }}-{{ session.end-time }}
+                        <span class="ml-2 text-xs rounded-full bg-gray-100 px-2 py-0.5">{{ session.get_status_display }}</span>
+                    </h3>
+                    <div class="text-xs text-gray-500">
+                        Slots: {{ session.slot_minutes }} mins - Capacity: {{ session.max_capacity }} - Overbook: {{ session.overbook_limit }}
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-2 text-center">
+                    <div class="rounded-lg bg-yellow-50 px-3 py-2">
+                        <div class="text-xs text-gray-500">Pending</div>
+                        <div class="font-semibold">{{ session.pending }}</div>
+                    </div>
+                    <div class="rounded-lg bg-green-50 px-3 py-2">
+                        <div class="text-xs text-gray-500">Confirmed</div>
+                        <div class="font-semibold">{{ session.confirmed }}</div>
+                    </div>
+                    <div class="rounded-lg bg-sky-50 px-3 py-2">
+                        <div class="text-xs text-gray-500">Completed</div>
+                        <div class="font-semibold">{{ session.completed }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Booked Patients -->
+             <div class="mt-4 overflow-hidden rounded-lg border">
+                <table class="min-w-full divide-y">
+                    <thead class="bg-gray-50 text-sm text-gray-600">
+                        <tr>
+                            <th class="px-4 py-2 text-left">Time</th>
+                            <th class="px-4 py-2 text-left">Patient</th>
+                            <th class="px-4 py-2 text-left">Status</th>
+                            <th class="px-4 py-2 text-left">Service</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y text-sm">
+                        {% for a in appts_by_session|get_item:s.id %}
+                            <tr>
+                                <td class="px-4 py-2">{{ a.start_time|date:"H:i" }}-{{ a.end_time|date:"H:i" }}</td>
+                                <td class="px-4 py-2">
+                                    {% if a.patient %}{{ a.patient.last_name }}, {{ a.patient.first_name }}
+                                    {% elf a.guest %}Guest: {{ a.guest.last_name }}, {{ a.guest.first_name }}
+                                    {% else %}<span class="text-gray-400">Unknown</span>{% endif %}
+                                </td>
+                                <td class="px-4 py-2">
+                                    <span class="inline-flex rounded-full px-2 py-0.5 text-xs
+                                        {% if a.status == 'CONFIRMED' %} bg-green-100 text-green-800
+                                        {% elif a.status == 'PENDING' %} bg-yellow-100 text-yellow-800
+                                        {% elif a.status == 'CANCELLED' %} bg-red-100 text-red-800
+                                        {% elif a.status == 'COMPLETED' %} bg-sky-100 text-sky-800
+                                        {% else %} bg-gray-100 text-gray-800 {% endif %}">
+                                        {{ a.status }}
+                                    </span>
+                                </td>
+                                <td class="px-4 py-2">{{ a.service.name }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr><td colspan="4" class="px-4 py-4 text-gray-500">No Appointments</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+             </div>
+        </section>
+    {% empty %}
+        <p class="text-gray-500">No sessions in this range.</p>
+    {% endfor %}
+</div>
+{% endblock %}
