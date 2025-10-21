@@ -1,4 +1,167 @@
+@layer theme, base, components, utilities;
+
 @import "tailwindcss";
-@tailwindcss base;
-@tailwindcss components;
-@tailwindcss utilities;
+@import "tailwindcss/preflight.css";
+@import "tailwindcss/utilities.css";
+
+@theme {
+  --color-primary: #1e5f74; /* Deep Teal Blue */
+  --color-secondary: #1b9c85; /* Emerald Green */
+  --color-neutral: #e5ebef; /* Soft Gray */
+  --color-accent: #c7e5e5; /* Sky Aqua */
+  --color-tertiary: #dceec9; /* Pastel Mint */
+}
+
+/* (Optional) Dark mode overrides */
+@theme .dark {
+  --color-neutral: #0f1e23; /* darker neutral for bg in dark */
+  --color-primary: #2a7a92;
+  --color-secondary: #26b89d;
+  --color-accent: #9fd6d6;
+  --color-tertiary: #bfe9c7;
+}
+
+.btn {
+  @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl
+        font-medium transition-colors select-none
+        focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60;
+}
+
+.btn-sm {
+  @apply px-3 py-1.5 text-sm rounded-lg;
+}
+.btn-lg {
+  @apply px-5 py-3 text-base rounded-xl;
+}
+.btn-icon {
+  @apply p-2 aspect-square;
+}
+
+.btn-primary {
+  @apply bg-primary text-neutral hover:bg-secondary;
+}
+.btn-secondary {
+  @apply bg-secondary text-neutral hover:bg-primary;
+}
+
+.btn-ghost {
+  @apply bg-transparent text-primary hover:bg-tertiary/40 border border-primary/20;
+}
+
+.btn-accent {
+  @apply bg-accent text-primary hover:bg-accent/80;
+}
+
+.btn-danger {
+  @apply bg-red-600 text-white hover:bg-red-700;
+}
+
+.badge {
+  @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium;
+}
+
+.badge-primary {
+  @apply bg-primary text-neutral;
+}
+
+.badge-secondary {
+  @apply bg-secondary text-neutral;
+}
+
+.badge-accent {
+  @apply bg-accent text-primary;
+}
+
+.badge-tertiary {
+  @apply bg-tertiary text-primary;
+}
+
+.card {
+  @apply rounded-2xl border border-accent/50 bg-tertiary/20 p-5 shadow-sm;
+}
+
+.card-plain {
+  @apply rounded-2xl border border-primary/15 bg-white/80 dark:bg-neutral/30 p-5 shadow-sm;
+}
+
+.input {
+  @apply w-full rounded-xl border border-primary/25 bg-white/90 dark:bg-neutral/30
+        px-3 py-2 text-[-15px] placeholder:text-primary/50
+        focus:outline-none focus:ring-2 focus:ring-accent/60;
+}
+
+.label {
+  @apply block text-sm font-medium text-primary mb-1;
+}
+
+.help {
+  @apply mt-1 text-xs text-primary/70;
+}
+.invalid {
+  @apply border-red-500 focus:ring-red-300;
+}
+
+.select {
+  @apply appearance-none bg-[right_0.75rem_center] bg-no-repeat pr-9;
+}
+
+.switch {
+  @apply relative inline-flex h-6 w-11 items-center rounded-full bg-primary/30 transition-colors;
+}
+.switch::after {
+  content: "";
+  @apply inline-block h-5 w-5 translate-x-1 rounded-full bg-white shadow transition-transform;
+}
+.switch[data-on:"true"] {
+  @apply bg-secondary;
+}
+.switch[data-on:"true"]::after {
+  @apply translate-x-5;
+}
+
+.alert {
+  @apply rounded-xl p-4 border flex gap-3 items-start;
+}
+.alert-info {
+  @apply bg-accent/30 border-accent/60 text-primary;
+}
+.alert-success {
+  @apply bg-tertiary/40 border-secondary/60 text-primary;
+}
+.alert-error {
+  @apply bg-red-50 border-red-300 text-red-800;
+}
+
+.navbar {
+  @apply w-full bg-neutral/60 backdrop-blur border-b border-primary/10;
+}
+.navbar-inner {
+  @apply mx-auto max-w-6xl px-4 py-3 flex items-center justify-between;
+}
+.nav-link {
+  @apply text-primary/90 hover:text-primary font-medium px-3 py-2 rounded-lg hover:bg-tertiary/40;
+}
+.nav-cta {
+  @reference btn btn-primary btn-sm;
+}
+.tablist {
+  @apply flex gap-2 border-b border-primary/15;
+}
+.tab {
+  @apply px-3 py-2 text-sm font-medium text-primary/70 hover:text-primary rounded-t-lg;
+}
+
+.tab[aria-selected="true"] {
+  @apply text-primary border-b-2 border-secondary;
+}
+
+/* Utility tints for backgrounds/layouts */
+.surface {
+  @apply bg-neutral;
+}
+.surface-1 {
+  @apply bg-tertiary/30;
+}
+.surface-2 {
+  @apply bg-accent/30;
+}

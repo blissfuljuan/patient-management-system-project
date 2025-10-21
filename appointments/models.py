@@ -89,6 +89,7 @@ class AppointmentNote(models.Model):
     appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE, related_name='notes')
     author_name = models.CharField(max_length=80)
     note = models.TextField()
+    test_attribute = models.CharField(max_length=80, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
