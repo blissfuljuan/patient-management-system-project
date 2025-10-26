@@ -1,5 +1,6 @@
 from datetime import date
 
+from MySQLdb.constants.ER import PRIMARY_CANT_HAVE_NULL
 from django.core.validators import RegexValidator
 from django.db import models
 

@@ -50,4 +50,17 @@ class DoctorDetailView(DetailView):
 
             ctx["sessions"] = sessions
             ctx["slots_by_session"] = slots_by_session
-            return ctx;
+            return ctx
+
+def dashboard(request):
+    sessions = [
+        {"time": "10:00", "doctor": "Dr. Santos", "room": "101", "booked": 3, "capacity": 6},
+        {"time": "11:00", "doctor": "Dr. Reyes", "room": "102", "booked": 5, "capacity": 5},
+    ]
+
+    bookings = [
+        {"time": "10:00", "patient": "Juan Dela Cruz", "status": "Confirmed"},
+        {"time": "11:00", "patient": "Maria Santos", "status": "Checked-In"},
+    ]
+
+    return render(request, 'doctors/dashboard.html', {"sessions": sessions, "bookings": bookings})
