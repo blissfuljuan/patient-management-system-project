@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 from pathlib import Path
 import environ
+from django.conf.global_settings import SESSION_EXPIRE_AT_BROWSER_CLOSE
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -32,10 +33,21 @@ DEBUG = env('DJANGO_DEBUG', default=True)
 
 ALLOWED_HOSTS = ['localhost','127.0.0.1', '.onrender.com']
 CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com']
+AUTH_USER_MODEL = "accounts.User"
+
+LOGIN_URL = "auth:login"
+LOGOUT_URL = "auth:logout"
+LOGIN_REDIRECT_URL = "auth:dashboard"
+LOGOUT_REDIRECT_URL = "auth:login"
+
+# Sessions (for "Remember me")
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 14
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 # Application definition
 
 INSTALLED_APPS = [
+    "accounts.apps.AccountsConfig",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
