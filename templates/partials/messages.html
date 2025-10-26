@@ -1,0 +1,17 @@
+{% if messages %}
+    <div class="grid gap-4 mb-4">
+        {% for message in messages %}
+            {% if message.tags == 'success' %}
+                <div class="alert alert--success">{{ message }}</div>
+            {% elif message.tags == 'info' %}
+                <div class="alert alert--info">{{ message }}</div>
+            {% elif message.tags == 'warning' %}
+                <div class="alert">{{ message }}</div>
+            {% elif message.tags == 'error' %}
+                <div class="alert alert--error">{{ message }}</div>
+            {% else %}
+                <div class="alert">{{ message }}</div>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endif %}
