@@ -10,11 +10,11 @@ class PatientForm(forms.ModelForm):
         model = Patient
         fields = ['first_name', 'last_name', 'email', 'phone', 'dob']
         widgets = {
-            'dob': forms.DateInput(attrs={'type': 'date', 'class': BASE_INPUT}),
-            'first_name': forms.TextInput(attrs={'class': BASE_INPUT}),
-            'last_name': forms.TextInput(attrs={'class': BASE_INPUT}),
-            'email': forms.EmailInput(attrs={'class': BASE_INPUT}),
-            'phone': forms.TextInput(attrs={'class': BASE_INPUT}),
+            'first_name': forms.TextInput(attrs={'class': "input", "placeholder": "First Name"}),
+            'last_name': forms.TextInput(attrs={'class': "input", "placeholder": "Last Name"}),
+            'email': forms.EmailInput(attrs={'class': "input"}),
+            'phone': forms.TextInput(attrs={'class': "input"}),
+            'dob': forms.DateInput(attrs={'type': 'date', 'class': "input"}),
         }
 
 class GuestPatientForm(forms.ModelForm):

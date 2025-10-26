@@ -1,5 +1,6 @@
+from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, UpdateView
+from django.views.generic import ListView, CreateView, UpdateView, DetailView
 
 from .forms import PatientForm
 from .models import Patient
@@ -16,6 +17,11 @@ class PatientListView(ListView):
         return (Patient.objects
                 .order_by('last_name', 'first_name')
                 .only('id', 'last_name', 'first_name', 'email', 'phone'))
+
+class PatientDetailView(DetailView):
+    model = Patient
+    template_name = 'patients/patient_detail.html'
+    context_object_name = 'patient'
 
 class PatientCreateView(CreateView):
     model = Patient

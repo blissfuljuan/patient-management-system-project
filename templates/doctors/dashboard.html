@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Doctor Dashboard - Clinic{% endblock %}
+{% block content %}
+
+<div class="grid grid-3">
+    <section class="card">
+        <h2 class="h2">Today's Sessions</h2>
+        <table class="table mt-4">
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Doctor</th>
+                    <th>Room</th>
+                    <th>Booked</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for session in sessions %}
+                <tr>
+                    <td>{{ session.time }}</td>
+                    <td>{{ session.doctor }}</td>
+                    <td>{{ session.room }}</td>
+                    <td><span class="chip">
+                        <span class="chip__dot"></span>
+                        {{ session.booked }} / {{ session.capacity }}
+                        </span>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </section>
+
+    <section class="card">
+        <h2 class="h2">Booked Patients</h2>
+        <table class="table mt-4">
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Patient</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for booking in bookings %}
+                <tr>
+                    <td>{{ booking.time }}</td>
+                    <td>{{ booking.patient }}</td>
+                    <td>
+                        {% if booking.status == "Confirmed" %}
+                            <span class="badge badge-accent">Confirmed</span>
+                        {% else %}
+                            <span class="badge badge-info">{{ booking.status }}</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </section>
+
+    <section class="card">
+        <h2 class="h2">Quick Actions</h2>
+        <div class="flex flex-wrap gap-2 mt-2">
+            <a class="btn btn--primary" href="{% url 'patients:create' %}">Add Patient</a>
+            <a class="btn" href="{% url 'patients:list' %}">View Patients</a>
+        </div>
+    </section>
+</div>
+
+{% endblock %}

@@ -18,6 +18,7 @@ staticfiles/
 .env.dev
 .env.local
 .env.*.local
+.env.*
 
 # Django specific files
 /local_settings.py

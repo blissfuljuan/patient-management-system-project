@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}{{ patient.last_name }}, {{ patient.first_name }} - Clinic{% endblock %}
+{% block content %}
+
+<section class="card">
+    <div class="flex items-start justify-between">
+        <div>
+            <h1 class="h2">{{ patient.last_name }}, {{ patient.first_name }}</h1>
+            <p class="text-muted">Patient ID: {{ patient.id }} • DOB: {{ patient.dob|date:"M d, Y" }}</p>
+            {% if patient.phone %}
+            <p class="mt-2">{{ patient.phone }}</p>
+            {% endif %}
+            {% if patient.email %}
+            <p class="mt-2">{{ patient.email }}</p>
+            {% endif %}
+        </div>
+        <div class="flex gap-2">
+            <a class="btn" href="{% url 'patients:edit' patient.id %}">Edit</a>
+            <a class="btn btn--ghost" href="{% url 'patients:list' %}">Edit</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
