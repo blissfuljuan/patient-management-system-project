@@ -11,14 +11,16 @@
 <body>
     <header class="navbar">
         <div class="navbar__brand">Clinic Admin</div>
+        {% if user.is_authenticated %}
         <nav class="navbar__actions">
             <a href="{% url 'doctors:home' %}" class="btn">Home</a>
                 <a href="{% url 'patients:list' %}" class="btn">Patients</a>
                 <a href="{% url 'appointments:list' %}" class="btn">Appointment</a>
                 <button id="themeToggle" class="btn btn--ghost" type="button">🌓</button>;
         </nav>
+        {% endif %}
     </header>
-    <main class="container">
+    <main class="container {% if not user.is_authenticated %} max-w-md mx-auto{% endif %}">
         {% include 'partials/messages.html' %}
         {% block content %} {% endblock %}
     </main>
